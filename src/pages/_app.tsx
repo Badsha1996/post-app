@@ -19,7 +19,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <meta name="description" content="next js full stack web Badsha Laskar" />
         <link rel="icon" href="" />
       </Head>
-      <div className="container text-gray-200
+      <div className="sm:pr-4 container text-gray-200
        mx-auto max-w-full flex 
        bg-gradient-to-r
        from-gray-700
@@ -32,7 +32,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
         flex-grow min-h-screen">
           <Component {...pageProps} />
         </div>
-
       </div>
     </SessionProvider>
   );
