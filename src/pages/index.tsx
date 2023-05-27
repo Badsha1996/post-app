@@ -4,17 +4,17 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import NewPost from "~/components/NewPost";
+import ProfilePicture from "~/components/ProfilePicture";
 
 const Home: NextPage = () => {
   const session = useSession()
   const user = session.data?.user
+
   return (
     <>
       <header className="sticky
       top-0
       z-10
-      border-b
-      border-gray-400
       pt-2
       flex
       ">
@@ -25,14 +25,20 @@ const Home: NextPage = () => {
         </h1>
         {
           user != null && (
-            <img src={user?.image!} alt="profile image" className="
-        h-8 w-8 rounded-full mr-1"/>
+            <ProfilePicture src={user.image} className="h-9 w-9 mr-4" />
           )
         }
       </header>
-      <main>
-        <NewPost/>
-      </main>
+      {session.status == 'authenticated' && (
+        <main>
+          <NewPost />
+        </main>
+      )}
+      {session.status != 'authenticated' && (
+        <main>
+          <h1>You have to login to post anything!!!</h1>
+        </main>
+      )}
     </>
   );
 };
