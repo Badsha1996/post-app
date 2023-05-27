@@ -16,7 +16,7 @@ const Button = ({ sm = false,
     'bg-indigo-400 hover:bg-indigo-300 focus-visible:bg-indigo-300'
 
     return <button className={`rounded-full transition-colors duration-300
-    disabled:cursor-not-allowed disabled:opacity-50 
+    disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-400
     text-white ${sizeClass} ${colorClass} ${className}`}
         {...props}>
     </button>
