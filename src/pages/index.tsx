@@ -5,7 +5,18 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import NewPost from "~/components/NewPost";
 import ProfilePicture from "~/components/ProfilePicture";
+import AllPosts from "~/components/AllPosts";
 
+const LatestPosts = () =>{
+  const posts = api.post.allPosts.useInfiniteQuery({},
+    {getNextPageParam : (page) => page.forwardCursor})
+  return <AllPosts 
+  posts={posts.data?.pages.flatMap(page => page.posts)}
+  isError = {posts.isError}
+  isLoading = {posts.isLoading}
+  hasMore = {posts.hasNextPage}
+  newPosts = {posts.fetchNextPage}/>
+}
 const Home: NextPage = () => {
   const session = useSession()
   const user = session.data?.user
@@ -32,6 +43,8 @@ const Home: NextPage = () => {
       {session.status == 'authenticated' && (
         <main>
           <NewPost />
+          {/* a fucntion that returns JSX Elements */}
+          <LatestPosts />
         </main>
       )}
       {session.status != 'authenticated' && (

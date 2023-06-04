@@ -4,10 +4,8 @@ import { api } from "~/utils/api"
 
 const NewPost = () => {
     const [inputValue, setInputValue] = useState('')
-
     const createPost = api.post.create.useMutation({
         onSuccess:post => {
-            console.log(post)
             setInputValue('')
         }
     })
@@ -26,7 +24,7 @@ const NewPost = () => {
             py-4 px-10 outline-none resize-none bg-transparent" placeholder="Post Anything you want!!"></textarea>
             </div>
             <div className="flex items-center gap-2">
-                <Button className="self-start mb-2" disabled={inputValue.length>200?true:false}>Post</Button>
+                <Button className="self-start mb-2" disabled={inputValue.length>200?true:false}>Send</Button>
                 <p className={(inputValue.length>200) ? 'text-red-500':''}>{inputValue.length}</p>/ 200
             </div>
 
