@@ -1,9 +1,6 @@
 import Image from "next/image"
+import { ProfilePictureProps } from "~/types/types"
 
-type ProfilePictureProps = {
-  src?:string | null
-  className?: string
-}
 const ProfilePicture = ({src,className}:ProfilePictureProps) => {
   return <div className={`relative
    h-10 w-10 

@@ -15,8 +15,8 @@ const NewPost = () => {
         createPost.mutate({content: inputValue})
     }
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-2 border-b px-4 py-2">
-            <div className="flex gap-4 border border-gray-600 rounded-lg">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-2 px-4 py-2">
+            <div className="flex gap-4  rounded-lg">
                 <textarea
                     value={inputValue}
                     onChange={e => setInputValue(e.target.value)}
