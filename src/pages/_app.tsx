@@ -32,6 +32,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
         flex-grow min-h-screen">
           <Component {...pageProps} />
         </div>
+        <div className="hidden md:min-w-[20%] md:block">
+          space
+        </div>
       </div>
     </SessionProvider>
   );
