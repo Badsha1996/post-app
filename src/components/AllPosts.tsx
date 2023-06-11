@@ -1,25 +1,7 @@
 import InfiniteScroll from "react-infinite-scroll-component"
+import { AllPostQueryProps }  from "~/types/types"
+import PostCard from "./PostCard"
 
-type AllPostQueryProps = {
-    isLoading: boolean,
-    isError: boolean,
-    hasMore: boolean | undefined,
-    newPosts: () => Promise<any>
-    posts: Post[] | undefined
-}
-
-type Post = {
-    id: string,
-    content: string,
-    createdAt: Date,
-    totalLikes: number,
-    likedByUser: boolean,
-    user: {
-        image: string | null;
-        id: string;
-        name: string | null;
-    }
-}
 const AllPosts = ({ posts, isError, isLoading, newPosts, hasMore }: AllPostQueryProps) => {
     if (isLoading) return <h1>Loading.....</h1>
     if (isError) return <h1>Error 404</h1>
@@ -36,17 +18,12 @@ const AllPosts = ({ posts, isError, isLoading, newPosts, hasMore }: AllPostQuery
                 dataLength={posts.length}>
                     {
                         posts.map(post =>{
-                            return <div key={post.id}>
-                                {post.user.name}
-                                {post.content} 
-                            </div>
+                            return <PostCard key={post.id} {...post}/>
                         })
                     }
             </InfiniteScroll>
-
         </ul>
     </>
-
 }
 
 export default AllPosts

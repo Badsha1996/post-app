@@ -43,7 +43,6 @@ const Home: NextPage = () => {
       {session.status == 'authenticated' && (
         <main>
           <NewPost />
-          {/* a fucntion that returns JSX Elements */}
           <LatestPosts />
         </main>
       )}

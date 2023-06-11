@@ -26,9 +26,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
        via-gray-900
        to-black">
         <SideBar />
-        <div className="border-l-[0.02rem] 
-        border-r-[0.03rem]
-        border-gray-500
+        <div className="
         flex-grow min-h-screen">
           <Component {...pageProps} />
         </div>
