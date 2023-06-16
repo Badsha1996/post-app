@@ -27,6 +27,11 @@ const Home: NextPage = () => {
       top-0
       z-10
       pt-2
+      rounded-b-lg
+      bg-gradient-to-r
+      from-gray-700/3
+      via-gray-900
+      to-black
       flex
       ">
         <h1 className="px-4 font-bold
