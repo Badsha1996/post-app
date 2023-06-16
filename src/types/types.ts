@@ -1,5 +1,9 @@
 import type{ DetailedHTMLProps, ButtonHTMLAttributes } from "react";
 
+export type LikeButtonProps = {
+    likedByUser : boolean
+    totalLikes : number
+}
 export type ProfilePictureProps = {
     src?:string | null
     className?: string

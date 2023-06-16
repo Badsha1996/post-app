@@ -1,15 +1,19 @@
 import { Post } from "~/types/types"
 import ProfilePicture from "./ProfilePicture"
 import Link from "next/link"
+import LikeButton from "./LikeButton"
 
 const handleDateFormat = new Intl.DateTimeFormat(undefined, {dateStyle:'short'})
 
 const PostCard = ({ id, user, content, createdAt, likedByUser, totalLikes }: Post) => {
     return(
         <li className="flex gap-10 border px-4 py-4 rounded-lg mb-4">
-            <Link href={`/profiles/${user.id}`}>
-                <ProfilePicture src={user.image}  className="rounded-none p-10"/>
-            </Link>
+            <div className="flex place-items-center flex-col">
+                <Link href={`/profiles/${user.id}`}>
+                    <ProfilePicture src={user.image}  className="rounded-none p-10"/>
+                </Link>
+                <LikeButton likedByUser={likedByUser} totalLikes={totalLikes}/>
+            </div>
             <div className="flex flex-col w-full">
                 <Link href={`/profiles/${user.id}`}>
                     <div className="border-b-[0.09rem] text-gray-300 w-fit font-semibold">

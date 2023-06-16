@@ -6,7 +6,9 @@ const AllPosts = ({ posts, isError, isLoading, newPosts, hasMore }: AllPostQuery
     if (isLoading) return <h1>Loading.....</h1>
     if (isError) return <h1>Error 404</h1>
     if (posts == null || posts.length === 0) {
-        return <div className="p-4 my-4 text-center text-xl text-gray-300 bg-gray-600">
+        return <div className="p-4 my-4 
+        text-center text-xl
+      text-gray-300 bg-gray-600">
             There are No Greeting Post Cards this year!!
         </div>
     }
