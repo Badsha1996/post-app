@@ -1,6 +1,8 @@
 import type{ DetailedHTMLProps, ButtonHTMLAttributes } from "react";
 
 export type LikeButtonProps = {
+    onClick : () => void
+    isLoading : boolean
     likedByUser : boolean
     totalLikes : number
 }

@@ -2,17 +2,56 @@ import { Post } from "~/types/types"
 import ProfilePicture from "./ProfilePicture"
 import Link from "next/link"
 import LikeButton from "./LikeButton"
+import { api } from "~/utils/api"
 
 const handleDateFormat = new Intl.DateTimeFormat(undefined, {dateStyle:'short'})
 
 const PostCard = ({ id, user, content, createdAt, likedByUser, totalLikes }: Post) => {
+    const trpcUtils = api.useContext();
+
+    const liked = api.post.liked.useMutation({
+        onSuccess : ({addedLike}) =>{
+            const updateData : Parameters<typeof trpcUtils.post.allPosts.setInfiniteData>[1] = (oldData) =>{
+                if(oldData == null) return
+
+                const addedCount = addedLike ? 1 : -1
+                return {
+                    ...oldData,
+                    pages : oldData.pages.map(page => {
+                        return {
+                            ...page,
+                            posts : page.posts.map(post =>{
+                                if(post.id === id){
+                                    return {
+                                        ...post,
+                                        totalLikes : post.totalLikes + addedCount,
+                                        likedByUser : addedLike
+                                    }
+                                }
+                                return post
+                            })
+                        }
+                    })
+                }
+            }
+
+            trpcUtils.post.allPosts.setInfiniteData({},updateData)
+        }
+    })
+
+    const handleLike = () =>{
+        liked.mutate({id})
+    }
     return(
-        <li className="flex gap-10 border px-4 py-4 rounded-lg mb-4">
+        <li key={id} className="flex gap-10 border px-4 py-4 rounded-lg mb-4">
             <div className="flex place-items-center flex-col">
                 <Link href={`/profiles/${user.id}`}>
                     <ProfilePicture src={user.image}  className="rounded-none p-10"/>
                 </Link>
-                <LikeButton likedByUser={likedByUser} totalLikes={totalLikes}/>
+                <LikeButton onClick={handleLike} 
+                isLoading = {liked.isLoading}
+                likedByUser={likedByUser} 
+                totalLikes={totalLikes}/>
             </div>
             <div className="flex flex-col w-full">
                 <Link href={`/profiles/${user.id}`}>

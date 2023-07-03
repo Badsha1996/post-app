@@ -88,5 +88,27 @@ export const postRouter = createTRPCRouter({
                 userId: ctx.session.user.id
             }
         })
+    }),
+    liked : protectedProcedure.input(z.object({
+        id:z.string()
+    })).mutation(async ({
+        input: {
+            id
+        },
+        ctx
+    }) => { 
+        const data = { postId : id, userId:ctx.session.user.id}
+        const like = await ctx.prisma.like.findUnique({
+            where : {userId_postId: data}
+        })
+        
+        if(like ==  null) {
+            await ctx.prisma.like.create({data})
+            return {addedLike : true}
+        }else{
+            await ctx.prisma.like.delete({where:{userId_postId : data}})
+            return {addedLike : false}
+        }
+
     })
 });
