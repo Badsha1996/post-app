@@ -28,6 +28,6 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs"
-  ],
+, "src/components/Chatbot.tsx"  ],
   "exclude": ["node_modules"]
 }

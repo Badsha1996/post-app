@@ -10,32 +10,44 @@ const NewPost = () => {
     const trpcUtils = api.useContext()
     const [inputValue, setInputValue] = useState('')
     const createPost = api.post.create.useMutation({
-        onSuccess: () => {
+        onSuccess: async() => {
             setInputValue('')
-            trpcUtils.post.allPosts.setInfiniteData({}, (oldData : any) => {
-                if(oldData == null || oldData.pages[0] == null) return 
-                const newSavedPost = {
-                    ...NewPost,
-                    totalLikes : 0,
-                    likedByUser : false,
-                    user : {
-                        id : session.data?.user.id,
-                        name:session.data?.user.name,
-                        image:session.data?.user.image
-                    }
-                }
-                return {
-                    ...oldData,
-                    pages:[
-                        {
-                            ...oldData.pages[0],
-                            posts: [newSavedPost, ...oldData.pages[0].posts]
-                        },
-                        ...oldData.pages.slice(1)
-                    ]
-                }
+            if (session.status !== "authenticated"){
+                return
+            }
+            // method => 2
+            await trpcUtils.post.invalidate();
+
+            /*
+                method => 1 : error 
+                for some reason it is not working. list key problem coming as 
+                warning
+              */
+
+            // trpcUtils.post.allPosts.setInfiniteData({}, (oldData : any) => {
+            //     if(oldData == null || oldData.pages[0] == null) return 
+            //     const newSavedPost = {
+            //         ...NewPost,
+            //         totalLikes : 0,
+            //         likedByUser : false,
+            //         user : {
+            //             id : session.data.user.id,
+            //             name:session.data.user.name,
+            //             image:session.data.user.image
+            //         }
+            //     }
+            //     return {
+            //         ...oldData,
+            //         pages:[
+            //             {
+            //                 ...oldData.pages[0],
+            //                 posts: [newSavedPost, ...oldData.pages[0].posts]
+            //             },
+            //             ...oldData.pages.slice(1)
+            //         ]
+            //     }
                 
-            })
+            // })
         }
     })
 

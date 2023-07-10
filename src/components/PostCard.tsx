@@ -44,7 +44,7 @@ const PostCard = ({ id, user, content, createdAt, likedByUser, totalLikes }: Pos
     }
     return(
         <li key={id} className="flex gap-10 border px-4 py-4 rounded-lg mb-4">
-            <div className="flex place-items-center flex-col">
+            <div className="flex place-items-center flex-col" >
                 <Link href={`/profiles/${user.id}`}>
                     <ProfilePicture src={user.image}  className="rounded-none p-10"/>
                 </Link>
@@ -53,7 +53,7 @@ const PostCard = ({ id, user, content, createdAt, likedByUser, totalLikes }: Pos
                 likedByUser={likedByUser} 
                 totalLikes={totalLikes}/>
             </div>
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full" >
                 <Link href={`/profiles/${user.id}`}>
                     <div className="border-b-[0.09rem] text-gray-300 w-fit font-semibold">
                         {user.name}
