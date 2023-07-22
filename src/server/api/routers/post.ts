@@ -1,9 +1,12 @@
+import {Prisma} from "@prisma/client";
+import {inferAsyncReturnType} from "@trpc/server";
 import {kStringMaxLength} from "buffer";
 import {z} from "zod";
-import {createTRPCRouter, publicProcedure, protectedProcedure} from "~/server/api/trpc";
+import {createTRPCRouter, publicProcedure, protectedProcedure, createTRPCContext} from "~/server/api/trpc";
 
 export const postRouter = createTRPCRouter({
     allPosts: publicProcedure.input(z.object({
+        onlyFollowing: z.boolean().optional(),
         limit: z.number().optional(),
         cursor: z.object(
             {id: z.string(), createdAt: z.date()}
@@ -11,16 +14,76 @@ export const postRouter = createTRPCRouter({
     })).query(async ({
         input: {
             limit = 10,
+            onlyFollowing = false,
             cursor
         },
         ctx
     }) => {
-        const userId = ctx.session?. user.id
+        const curUserId  = ctx.session?.user.id
+        return await allPosts({
+            limit,ctx,cursor,
+            whereClause : curUserId == null || !onlyFollowing ? undefined : {
+                user : {
+                    followers : { some : { id : curUserId}}
+                }
+            }
+        })
+    }),
+    create: protectedProcedure.input(z.object({content: z.string()})).mutation(async ({input: {
+            content
+        }, ctx}) => {
+        return await ctx.prisma.post.create({
+            data: {
+                content,
+                userId: ctx.session.user.id
+            }
+        })
+    }),
+    liked: protectedProcedure.input(z.object({id: z.string()})).mutation(async ({input: {
+            id
+        }, ctx}) => {
+        const data = {
+            postId: id,
+            userId: ctx.session.user.id
+        }
+        const like = await ctx.prisma.like.findUnique({
+            where: {
+                userId_postId: data
+            }
+        })
+
+        if (like == null) {
+            await ctx.prisma.like.create({data})
+            return {addedLike: true}
+        } else {
+            await ctx.prisma.like.delete({
+                where: {
+                    userId_postId: data
+                }
+            })
+            return {addedLike: false}
+        }
+
+    })
+});
+
+
+async function allPosts({whereClause, ctx, limit, cursor} : {
+    whereClause?: Prisma.PostWhereInput,
+    limit : number,
+    cursor : {
+        id: string,
+        createdAt: Date
+    } | undefined,
+    ctx : inferAsyncReturnType < typeof createTRPCContext >
+}) {
+    const userId = ctx.session ?. user.id
         const posts = await ctx.prisma.post.findMany({
             take: limit + 1,
             cursor: cursor ? {
                 createdAt_id: cursor
             } : undefined,
+            where:whereClause,
             orderBy: [
                 {
                     createdAt: 'desc'
@@ -51,8 +114,8 @@ export const postRouter = createTRPCRouter({
                 }
             }
         })
-        let forwardCursor: typeof cursor | undefined
-        if (posts.length > limit) {
+        let forwardCursor: typeof cursor |undefined 
+        if(posts.length > limit) {
             const nextElement = posts.pop()
             if (nextElement != null) {
                 forwardCursor = {
@@ -78,37 +141,4 @@ export const postRouter = createTRPCRouter({
             }),
             forwardCursor
         }
-    }),
-    create: protectedProcedure.input(z.object({content: z.string()})).mutation(async ({input: {
-            content
-        }, ctx}) => {
-        return await ctx.prisma.post.create({
-            data: {
-                content,
-                userId: ctx.session.user.id
-            }
-        })
-    }),
-    liked : protectedProcedure.input(z.object({
-        id:z.string()
-    })).mutation(async ({
-        input: {
-            id
-        },
-        ctx
-    }) => { 
-        const data = { postId : id, userId:ctx.session.user.id}
-        const like = await ctx.prisma.like.findUnique({
-            where : {userId_postId: data}
-        })
-        
-        if(like ==  null) {
-            await ctx.prisma.like.create({data})
-            return {addedLike : true}
-        }else{
-            await ctx.prisma.like.delete({where:{userId_postId : data}})
-            return {addedLike : false}
-        }
-
-    })
-});
+}

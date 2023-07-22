@@ -23,20 +23,13 @@ export const SideBar: React.FC = () => {
                         </div>
                     </Link>
                 </li>
+                
                 <li className="border rounded-full px-4 py-1 border-gray-600
             hover:bg-gray-600
             hover:border-gray-500  transition duration-150">
-                    <Link href="/"><div className="group flex items-center gap-1">
-                        <TbNews className="text-2xl  group-hover:fill-green-400" />
-                        <span className="hidden md:inline">News</span>
-                    </div></Link>
-                </li>
-                <li className="border rounded-full px-4 py-1 border-gray-600
-            hover:bg-gray-600
-            hover:border-gray-500  transition duration-150">
-                    <Link href="/"><div className="group flex items-center gap-1">
+                    <Link href={'/follow'}><div className="group flex items-center gap-1">
                         <SiFeedly className="text-2xl group-hover:fill-green-400" />
-                        <span className="hidden md:inline">Feed</span>
+                        <span className="hidden md:inline hover:text-green-500">Follow</span>
                     </div></Link>
                 </li>
                 {

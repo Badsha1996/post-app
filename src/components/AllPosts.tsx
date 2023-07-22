@@ -1,9 +1,10 @@
 import InfiniteScroll from "react-infinite-scroll-component"
 import { AllPostQueryProps }  from "~/types/types"
 import PostCard from "./PostCard"
+import Loading from "./Loading"
 
 const AllPosts = ({ posts, isError, isLoading, newPosts, hasMore }: AllPostQueryProps) => {
-    if (isLoading) return <h1>Loading.....</h1>
+    if (isLoading) return <Loading/>
     if (isError) return <h1>Error 404</h1>
     if (posts == null || posts.length === 0) {
         return <div className="p-4 my-4 
@@ -16,7 +17,7 @@ const AllPosts = ({ posts, isError, isLoading, newPosts, hasMore }: AllPostQuery
         <ul>
             <InfiniteScroll next={newPosts}
                 hasMore={hasMore!}
-                loader={'Please wait...'}
+                loader={<Loading/>}
                 dataLength={posts.length}>
                     {
                         posts.map(post =>{

@@ -1,5 +1,8 @@
 import type{ DetailedHTMLProps, ButtonHTMLAttributes } from "react";
 
+export type LoadingProps = {
+    big?:boolean
+}
 export type LikeButtonProps = {
     onClick : () => void
     isLoading : boolean
