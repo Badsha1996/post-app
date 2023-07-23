@@ -10,7 +10,7 @@ const AllPosts = ({ posts, isError, isLoading, newPosts, hasMore }: AllPostQuery
         return <div className="p-4 my-4 
         text-center text-xl
       text-gray-300 bg-gray-600">
-            There are No Greeting Post Cards this year!!
+            There are no post availabe!
         </div>
     }
     return <>
