@@ -9,9 +9,7 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     if (profile == null || profile.name == null) return <ErrorPage statusCode={404} />
     return (
         <>
-            <head>
-                <title>`Post App - ${profile?.name}`</title>
-            </head>
+            
             {profile.name}
         </>
     )
