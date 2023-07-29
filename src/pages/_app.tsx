@@ -8,12 +8,15 @@ import Head from "next/head";
 import { title } from "process";
 import { SideBar } from "~/components/SideBar";
 import LeftBar from "~/components/LeftBar";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  const queryClient = new QueryClient()
   return (
+    <QueryClientProvider client={queryClient}>
     <SessionProvider session={session}>
       <Head>
         <title>Post App</title>
@@ -39,6 +42,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         </div>
       </div>
     </SessionProvider>
+    </QueryClientProvider>
   );
 };
 

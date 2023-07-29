@@ -14,12 +14,12 @@ export const env = createEnv({
       process.env.VERCEL ? z.string().min(1) : z.string().url(),
     ),
     GOOGLE_CLIENT_ID: z.string(),
-    GOOGLE_CLIENT_SECRET: z.string(),
+    GOOGLE_CLIENT_SECRET: z.string()
   },
 
   
   client: {
-
+    NEXT_PUBLIC_API_KEY:z.string()
   },
 
   runtimeEnv: {
@@ -29,5 +29,6 @@ export const env = createEnv({
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    NEXT_PUBLIC_API_KEY:process.env.NEXT_PUBLIC_API_KEY
   },
 });
