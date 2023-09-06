@@ -7,8 +7,9 @@ const TrendCard = ({ posts, isError, newPosts, hasMore }: AllPostQueryProps) => 
     if (posts == null || posts.length === 0) {
         return null
     }
+    console.log(posts)
     return (
-    <div>TrendCard</div>
+    <div>{}</div>
   )
 }
 

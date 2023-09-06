@@ -2,15 +2,38 @@ import type { GetStaticPaths, GetStaticPropsContext, InferGetStaticPropsType, Ne
 import { ssgHelper } from "~/server/api/ssgHelper";
 import { api } from "~/utils/api";
 import ErrorPage from 'next/error'
+import AllPosts from "~/components/AllPosts";
+import { useSession } from "next-auth/react";
 
 const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ id }) => {
     const { data: profile } = api.profile.getUsingId.useQuery({ id })
-
+    const session = useSession()
+    const posts = api.post.allUserPosts.useInfiniteQuery(
+        { userId: id },
+        { getNextPageParam: (lastPage) => lastPage.forwardCursor }
+    )
     if (profile == null || profile.name == null) return <ErrorPage statusCode={404} />
     return (
         <>
-            
-            {profile.name}
+
+            {session.status == 'authenticated' && (
+                <main>
+                    {profile.name}
+                    <AllPosts
+                        posts={posts.data?.pages.flatMap(page => page.posts)}
+                        isError={posts.isError}
+                        isLoading={posts.isLoading}
+                        hasMore={posts.hasNextPage}
+                        newPosts={posts.fetchNextPage} />
+                </main>
+            )}
+            {session.status != 'authenticated' && (
+                <main>
+                    <h1>You have to login to post anything!!!</h1>
+                </main>
+            )}
+
+
         </>
     )
 }

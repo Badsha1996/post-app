@@ -5,6 +5,26 @@ import {z} from "zod";
 import {createTRPCRouter, publicProcedure, protectedProcedure, createTRPCContext} from "~/server/api/trpc";
 
 export const postRouter = createTRPCRouter({
+    allUserPosts: publicProcedure.input(z.object({
+        userId: z.string(),
+        limit: z.number().optional(),
+        cursor: z.object(
+            {id: z.string(), createdAt: z.date()}
+        ).optional()
+    })).query(async ({
+        input: {
+            limit = 10,
+            userId,
+            cursor
+        },
+        ctx
+    }) => {
+        const curUserId  = ctx.session?.user.id
+        return await allPosts({
+            limit,ctx,cursor,
+            whereClause : {userId},
+        })
+    }),
     allPosts: publicProcedure.input(z.object({
         onlyFollowing: z.boolean().optional(),
         limit: z.number().optional(),
